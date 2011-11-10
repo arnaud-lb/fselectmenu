@@ -185,7 +185,7 @@ class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_Form
                 if (null !== $translator) {
                     $opt_value = $translator->translate($opt_value);
                 }
-                $list[] = sprintf('<span class="%1$s-optgroup %2$s">%3$s', $namespace, $opt_disable, $this->view->escape($opt_value));
+                $list[] = sprintf('<span class="%1$s-optgroup %2$s"><span class="%1$s-optgroup-title">%3$s</span>', $namespace, $opt_disable, $this->view->escape($opt_value));
                 foreach ($opt_label as $val => $lab) {
                     $list[] = $this->_build($val, $lab, $value, $disable, $optionAttribs, $rawLabels, $namespace);
                 }
