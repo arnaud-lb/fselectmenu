@@ -124,7 +124,7 @@ class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_Form
                         $selectedLabels[$val] = $lab;
                         $isSelected = true;
                     }
-                    $nativeSelect .= '<option' . ($isSelected ? 'selected="selected"' : '') . ' value="'.$this->view->escape($val).'">'.$this->view->escape($lab).'</option>';
+                    $nativeSelect .= '<option' . ($isSelected ? ' selected="selected"' : '') . ' value="'.$this->view->escape($val).'">'.$this->view->escape($lab).'</option>';
                 }
             } else {
                 $isSelected = false;
