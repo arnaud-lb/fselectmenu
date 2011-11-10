@@ -1,4 +1,3 @@
-
 FSelectMenu
 ===========
 
@@ -21,6 +20,7 @@ Load and init the FSelectMenu javascript module:
 require(['fselectmenu/fselectmenu'], function(FSelectMenu) {
     FSelectMenu.init();
 });
+```
 
 That's all.
 
