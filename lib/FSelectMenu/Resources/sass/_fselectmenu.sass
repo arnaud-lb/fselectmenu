@@ -1,50 +1,50 @@
 
-@mixin fselectmenu
+@mixin fselectmenu($namespace: fselectmenu)
 
     //
         This defines the basic layout of the select menu
 
-    .fselectmenu
+    .#{$namespace}
         display: inline-block
         *zoom: 1
         cursor: pointer
         max-width: 100%
 
-    .fselectmenu-native
+    .#{$namespace}-native
         display: none
 
-    .fselectmenu-label-wrapper
+    .#{$namespace}-label-wrapper
         display: block
         position: relative
 
-    .fselectmenu-label
+    .#{$namespace}-label
         display: block
         white-space: nowrap
         overflow: hidden
         text-overflow: ellipsis
 
-    .fselectmenu-icon
+    .#{$namespace}-icon
         display: block
         position: absolute
         top: 0
         right: 0
         height: 100%
             
-    .fselectmenu-options-wrapper
+    .#{$namespace}-options-wrapper
         display: none
         position: absolute
         z-index: 32000
 
-        &.fselectmenu-opened
+        &.#{$namespace}-opened
             display: block
 
-    .fselectmenu-options
+    .#{$namespace}-options
         display: block
         overflow: auto
         overflow-x: hidden
         max-height: 200px
 
-    .fselectmenu-option
+    .#{$namespace}-option
         cursor: pointer
         display: block
         white-space: nowrap
