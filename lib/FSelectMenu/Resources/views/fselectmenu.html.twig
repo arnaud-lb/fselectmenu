@@ -1,0 +1,58 @@
+
+{% use "form_div_layout.html.twig" with choice_widget as orig_choice_widget %}
+
+{% block fselectmenu_widget_choice_options %}
+{% spaceless %}
+    {% for choice, label in options %}
+        {% if _form_is_choice_selected(form, choice) %}
+            {% set selectedLabel = label|trans %}
+        {% endif %}
+        <span class="fselectmenu-option {% if _form_is_choice_selected(form, choice) %}fselectmenu-selected{% endif %}" data-label="{{ label|trans }}" data-value="{{ choice }}">{{ label|trans }}</span>
+    {% endfor %}
+{% endspaceless %}
+{% endblock %}
+
+{% block fselectmenu_choice_widget %}
+{% spaceless %}
+    {% set _options %}
+        <span class="fselectmenu-options-wrapper fselectmenu-events">
+            <span class="fselectmenu-options">
+                {% if empty_value is not none %}
+                    <span class="fselectmenu-option" data-label="{{ empty_value ? empty_value|trans : ' ' }}" data-value="">{{ empty_value ? empty_value|trans : ' ' }}</span>
+                {% endif %}
+                {% if preferred_choices|length > 0 %}
+                    {% set options = preferred_choices %}
+                    {{ block('fselectmenu_widget_choice_options') }}
+                    {% if choices|length > 0 %}
+                        <span class="fselectmenu-option fselectmenu-disabled" data-label="" data-value="">{{ separator }}</span>
+                    {% endif %}
+                {% endif %}
+                {% set options = choices %}
+                {{ block('fselectmenu_widget_choice_options') }}
+            </span>
+        </span>
+    {% endset %}
+
+    {% set orig_attr = attr %}
+    {% set orig_id = id %}
+
+    {% set id = id~'_html' %}
+    {% set attr = attr|merge({
+        'class': attr.class|default('fselectmenu-style-default') ~ ' fselectmenu fselectmenu-events'
+        , 'tabindex': attr.tabindex|default('0')
+    })  %}
+
+    <span {{ block('widget_attributes') }}>
+        {% set attr = orig_attr %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' fselectmenu-native'}) %}
+        {% set id = orig_id %}
+
+        {{ block('orig_choice_widget') }}
+
+        <span class="fselectmenu-label-wrapper"><span class="fselectmenu-label">{{ choices[form.get('value')]|default(empty_value)|trans|default(' ') }}</span><span class="fselectmenu-icon"></span></span>
+        {{ _options }}
+    </span>
+
+{% endspaceless %}
+{% endblock fselectmenu_choice_widget %}
+
