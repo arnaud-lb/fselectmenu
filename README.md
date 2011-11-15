@@ -5,7 +5,7 @@ FSelectMenu is a Fast and non-intrusive HTML select menu.
 
 Features:
 
- - Fast: rendering is done on the server side
+ - Fast: rendering is done on the server side (no DOM manipulation on the client side)
  - Non intrusive: Works out of the box with existing scripts
    - Scripts don't have to know anything about FSelectMenu for simple things like listening for events, getting and changing the value, etc.
    - Scripts interact with the native select element directly
@@ -31,15 +31,13 @@ Just trigger the `change` event on the native select element when programmatical
 Install
 -------
 
-Symfony
-```````
+### Symfony
 
 Register the Bundle
 
 TODO
 
-Zend
-````
+### Zend
 
 Register view helper path:
 
