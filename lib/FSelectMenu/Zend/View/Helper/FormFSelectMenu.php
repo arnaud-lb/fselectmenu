@@ -1,6 +1,7 @@
 <?php
 
 use FSelectMenu\Renderer;
+use FSelectMenu\Translator\ZendTranslator;
 
 class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_FormElement
 {
@@ -33,7 +34,9 @@ class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_Form
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info); // name, id, value, attribs, options, listsep, disable
 
-        $renderer = new Renderer($this->view->getEncoding());
+        $translator = $this->getTranslator();
+        $translator = $translator ? new ZendTranslator($translator) : null;
+        $renderer = new Renderer($this->view->getEncoding(), $translator);
 
         $fopts = array();
 

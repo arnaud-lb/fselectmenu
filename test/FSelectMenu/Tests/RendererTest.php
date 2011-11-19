@@ -3,13 +3,14 @@
 namespace FSelectMenu\Tests;
 
 use FSelectMenu\Renderer;
+use FSelectMenu\Translator\ArrayTranslator;
 
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
     /** @dataProvider getTestRenderData */
-    public function testRender($value, $choices, $options, $expect)
+    public function testRender($value, $choices, $options, $expect, $translator = null)
     {
-        $renderer = new Renderer;
+        $renderer = new Renderer('utf-8', $translator);
         $result = $renderer->render($value, $choices, $options);
 
         $expect = str_replace('><', ">\n<", $expect);
@@ -258,6 +259,38 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     '<span foo="bar" data-value="a" data-label="A" class="fselectmenu-option">A</span>'
                     .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected">X</span>'
                     .'<span bar="foo" data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                )),
+            ),
+
+            // Translation
+            array(
+                'x',
+                array(
+                    'a' => array(
+                        'b' => 'B',
+                        'x' => 'X',
+                        'z' => 'Z',
+                    ),
+                ), array(),
+                $out(null, $native(null,
+                    '<optgroup title="tr_a">'
+                    .'<option value="b">tr_B</option>'
+                    .'<option selected="selected" value="x">tr_X</option>'
+                    .'<option value="z">tr_Z</option>'
+                    .'</optgroup>'
+                ) . $label('tr_X') . $opts(null,
+                    '<span class="fselectmenu-optgroup">'
+                    .'<span class="fselectmenu-optgroup-title">tr_a</span>'
+                    .'<span data-value="b" data-label="tr_B" class="fselectmenu-option">tr_B</span>'
+                    .'<span data-value="x" data-label="tr_X" class="fselectmenu-option fselectmenu-selected">tr_X</span>'
+                    .'<span data-value="z" data-label="tr_Z" class="fselectmenu-option">tr_Z</span>'
+                    .'</span>'
+                )),
+                new ArrayTranslator(array(
+                    'a' => 'tr_a',
+                    'B' => 'tr_B',
+                    'X' => 'tr_X',
+                    'Z' => 'tr_Z',
                 )),
             ),
 

@@ -2,6 +2,8 @@
 
 namespace FSelectMenu;
 
+use FSelectMenu\Translator\ArrayTranslator;
+
 class Renderer
 {
     const ATTRS_OPT = 'attrs';
@@ -12,10 +14,16 @@ class Renderer
     const FIXED_LABEL_OPT = 'fixedLabel';
 
     private $charset;
+    private $translator;
 
-    public function __construct($charset = 'utf-8')
+    public function __construct($charset = 'utf-8', $translator = null)
     {
         $this->charset = $charset;
+
+        if (null === $translator) {
+            $translator = new ArrayTranslator;
+        }
+        $this->translator = $translator;
     }
 
     public function render($value, array $choices, array $options = array())
@@ -79,6 +87,7 @@ class Renderer
         } else {
             $label = $this->getSelectedLabel($choices, $value);
         }
+        $label = $this->translator->trans($label);
 
         // fixes rendering issues when the label is empty
         $label = $label ?: "\xC2\xA0"; // &nbsp;
@@ -114,12 +123,14 @@ class Renderer
             if (\is_array($choiceLabel)) {
                 $html[] = '<span class="fselectmenu-optgroup">';
                 $html[] = '<span class="fselectmenu-optgroup-title">';
-                $html[] = $this->escape($choiceValue);
+                $html[] = $this->escape($this->translator->trans($choiceValue));
                 $html[] = '</span>';
                 $html[] = $this->buildChoices($choiceLabel, $value, $rawLabels, $optionAttrs);
                 $html[] = '</span>';
                 continue;
             }
+
+            $choiceLabel = $this->translator->trans($choiceLabel);
 
             if (isset($optionAttrs[$choiceValue])) {
                 $attrs = $optionAttrs[$choiceValue];
@@ -203,17 +214,20 @@ class Renderer
         foreach($choices as $optValue => $optLabel) {
 
             if (\is_array($optLabel)) {
-                $html[] = '<optgroup title="'.$this->escape($optValue).'">';
+                $title = $this->translator->trans($optValue);
+                $html[] = '<optgroup title="'.$this->escape($title).'">';
                 $html[] = $this->buildNativeChoices($optLabel, $value);
                 $html[] = '</optgroup>';
                 continue;
             }
 
+            $label = $this->translator->trans($optLabel);
+
             $selected = $value === $optValue;
             $html[] .= '<option'
                     .($selected ? ' selected="selected"' : '')
                     .' value="'.$this->escape($optValue)
-                    .'">'.$this->escape($optLabel).'</option>';
+                    .'">'.$this->escape($label).'</option>';
         }
 
         return \implode('', $html);

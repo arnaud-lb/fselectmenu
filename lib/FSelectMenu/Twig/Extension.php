@@ -7,6 +7,15 @@ use FSelectMenu\Renderer;
 class Extension extends \Twig_Extension
 {
     private $renderer;
+    private $translator;
+
+    /**
+     * @param FSelectMenu\Translator\ArrayTranslator-like $translator
+     */
+    public function __construct($translator)
+    {
+        $this->translator = $translator;
+    }
 
     public function getFunctions() {
         return array(
@@ -17,7 +26,7 @@ class Extension extends \Twig_Extension
     public function fselectmenuFunction($env, $value, array $choices, array $options)
     {
         if (null === $renderer = $this->renderer) {
-            $renderer = $this->renderer = new Renderer($env->getCharset());
+            $renderer = $this->renderer = new Renderer($env->getCharset(), $this->translator);
         }
 
         return new \Twig_Markup($renderer->render($value, $choices, $options));
