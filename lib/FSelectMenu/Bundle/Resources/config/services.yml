@@ -1,0 +1,7 @@
+
+services:
+    twig.extension.fselectmenu:
+        class:  FSelectMenu\Twig\Extension
+        tags:
+            - { name: twig.extension }
+

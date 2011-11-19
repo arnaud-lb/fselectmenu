@@ -1,0 +1,7 @@
+
+Since 0.1:
+
+- Custom CSS namespace support has been dropped; all CSS classes are now in the fselectmenu- namespace
+- FSelectMenu\FSelectMenuBundle has been moved to FSelectMenu\Bundle\FSelectMenuBundle
+- FSelectMenu/Resources has been moved to FSelectMenu/Bundle/Resources
+

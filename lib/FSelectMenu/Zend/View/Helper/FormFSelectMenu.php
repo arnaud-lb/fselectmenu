@@ -1,4 +1,7 @@
 <?php
+
+use FSelectMenu\Renderer;
+
 class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_FormElement
 {
     /**
@@ -30,219 +33,45 @@ class FSelectMenu_Zend_View_Helper_FormFSelectMenu extends Zend_View_Helper_Form
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info); // name, id, value, attribs, options, listsep, disable
 
-        $namespace = 'fselectmenu';
-        if (isset($attribs['namespace'])) {
-            $namespace = $attribs['namespace'];
-            unset($attribs['namespace']);
-        } 
+        $renderer = new Renderer($this->view->getEncoding());
+
+        $fopts = array();
 
         // options applying to option elements
         if (isset($attribs['optionAttribs'])) {
-            $optionAttribs = $attribs['optionAttribs'];
+            $fopts[Renderer::OPTION_ATTRS_OPT] = $attribs['optionAttribs'];
             unset($attribs['optionAttribs']);
-        } else {
-            $optionAttribs = array();
         }
 
         // options applying to options' parent element
         if (isset($attribs['optionWrapperAttribs'])) {
-            $optionWrapperAttribs = $attribs['optionWrapperAttribs'];
-        } else {
-            $optionWrapperAttribs = array();
+            $fopts[Renderer::OPTION_ATTRS_OPT] = $attribs['optionWrapperAttribs'];
+            unset($attribs['optionWrapperAttribs']);
         }
-        if (!isset($optionWrapperAttribs['class'])) {
-            $optionWrapperAttribs['class'] = '';
-        }
-        $optionWrapperAttribs['class'] .= sprintf(' %1$s-options-wrapper %1$s-events', $namespace);
 
         if (isset($attribs['rawLabels']) && true === $attribs['rawLabels']) {
-            $rawLabels = true;
+            $fopts[Renderer::RAW_LABELS_OPT] = true;
             unset($attribs['rawLabels']);
-        } else {
-            $rawLabels = false;
         }
 
-        // force $value to array so we can compare multiple values to multiple
-        // options; also ensure it's a string for comparison purposes.
-        $value = array_map('strval', (array) $value);
-
-        // check if element may have multiple values
-        $multiple = false;
-
-        if (substr($name, -2) == '[]') {
-            // multiple implied by the name
-            $multiple = true;
-        }
-
-        if (isset($attribs['multiple'])) {
-            // Attribute set
-            if ($attribs['multiple']) {
-                // True attribute; set multiple attribute
-                $multiple = true;
-
-                // Make sure name indicates multiple values are allowed
-                if (!empty($multiple) && (substr($name, -2) != '[]')) {
-                    $name .= '[]';
-                }
-            } else {
-                // False attribute; ensure attribute not set
-                $multiple = false;
-            }
-            unset($attribs['multiple']);
-        }
-
-        if (!isset($attribs['class'])) {
-            $attribs['class'] = '';
-        }
-
-        $attribs['class'] .= sprintf(' %1$s %1$s-events', $namespace);
-
-        if ($multiple) {
-            $attribs['class'] .= sprintf(' %1$s-multiple', $namespace);
-        }
-
-        // now start building the XHTML.
         if (true === $disable) {
-            $attribs['class'] .= sprintf(' %1$s-disabled', $namespace);
+            $attribs['disabled'] = 'disabled';
         }
 
-        $selectedLabels = array();
-        $nativeSelect = sprintf(
-            '<select name="%2$s" id="%3$s" class="%1$s-native" %4$s>'
-            , $namespace
-            , $this->view->escape($name)
-            , $this->view->escape($id)
-            , $disable ? ' disabled="disabled"' : ''
+        $attribs['id'] = $id.'_html';
+
+        $fopts[Renderer::NATIVE_ATTRS_OPT] = array(
+            'id' => $id,
+            'name' => $name,
         );
-        $selected = array_flip($value);
-
-        foreach($options as $opt_value => $opt_label) {
-            if (is_array($opt_label)) {
-                foreach($opt_label as $val => $lab) {
-                    $isSelected = false;
-                    if (isset($selected[$val])) {
-                        $selectedLabels[$val] = $lab;
-                        $isSelected = true;
-                    }
-                    $nativeSelect .= '<option' . ($isSelected ? ' selected="selected"' : '') . ' value="'.$this->view->escape($val).'">'.$this->view->escape($lab).'</option>';
-                }
-            } else {
-                $isSelected = false;
-                if (isset($selected[$opt_value])) {
-                    $selectedLabels[$opt_value] = $opt_label;
-                    $isSelected = true;
-                }
-                $nativeSelect .= '<option' . ($isSelected ? ' selected="selected"' : '') . ' value="'.$this->view->escape($opt_value).'">'.$this->view->escape($opt_label).'</option>';
-            }
-        }
-
-        $nativeSelect .= '</select>';
-
-        if (empty($selectedLabels)) {
-            foreach($options as $opt_value => $opt_label) {
-                if (is_array($opt_label)) {
-                    foreach($opt_label as $val => $lab) {
-                        $selectedLabels[$val] = $lab;
-                        break;
-                    }
-                } else {
-                    $selectedLabels[$opt_value] = $opt_label;
-                }
-                break;
-            }
-        }
-
-        if (!isset($attribs['tabindex'])) {
-            $attribs['tabindex'] = '0';
-        }
-
-        // Build the surrounding element.
-        $xhtml = '<span '
-                . ' id="' . $this->view->escape($id) . '_html"'
-                . $this->_htmlAttribs($attribs)
-                . ">\n    "
-                . $nativeSelect;
 
         if (isset($attribs['data-fixedlabel'])) {
-            $label = $attribs['data-fixedlabel'];
-        } else {
-            $label = implode(', ', $selectedLabels);
-        }
-        $label = $label ?: "\xC2\xA0"; // nbsp; fixes rendering issues when the label is empty
-
-        $xhtml .= sprintf('<span class="%1$s-label-wrapper"><span class="%1$s-label">%2$s</span><span class="%1$s-icon"></span></span>', $namespace,  $rawLabels ? $label : $this->view->escape($label));
-        $xhtml .= sprintf('<span %2$s><span class="%1$s-options">', $namespace, $this->_htmlAttribs($optionWrapperAttribs));
-
-        // build the list of options
-        $list       = array();
-        $translator = $this->getTranslator();
-        foreach ((array) $options as $opt_value => $opt_label) {
-            if (is_array($opt_label)) {
-                $opt_disable = '';
-                if (is_array($disable) && in_array($opt_value, $disable)) {
-                    $opt_disable = 'disabled';
-                }
-                if (null !== $translator) {
-                    $opt_value = $translator->translate($opt_value);
-                }
-                $list[] = sprintf('<span class="%1$s-optgroup %2$s"><span class="%1$s-optgroup-title">%3$s</span>', $namespace, $opt_disable, $this->view->escape($opt_value));
-                foreach ($opt_label as $val => $lab) {
-                    $list[] = $this->_build($val, $lab, $value, $disable, $optionAttribs, $rawLabels, $namespace);
-                }
-                $list[] .= '</span>';
-            } else {
-                $list[] = $this->_build($opt_value, $opt_label, $value, $disable, $optionAttribs, $rawLabels, $namespace);
-            }
+            $fopts[Renderer::FIXED_LABEL_OPT] = $attribs['data-fixedlabel'];
+            unset($attribs['data-fixedlabel']);
         }
 
-        // add the options to the xhtml and close the select
-        $xhtml .= implode("\n    ", $list) . "\n</span></span></span>";
+        $fopts[Renderer::ATTRS_OPT] = $attribs;
 
-        return $xhtml;
-    }
-
-    /**
-     * Builds the options' markup
-     *
-     * @param string $value Options Value
-     * @param string $label Options Label
-     * @param array  $selected The option value(s) to mark as 'selected'
-     * @param array|bool $disable Whether the select is disabled, or individual options are
-     * @return string Option Tag XHTML
-     */
-    protected function _build($value, $label, $selected, $disable, $optionAttribs, $rawLabels, $namespace)
-    {
-        if (is_bool($disable)) {
-            $disable = array();
-        }
-
-        $opt = '<span'
-             . ' data-value="' . $this->view->escape($value) . '" data-label="' . $this->view->escape($rawLabels ? $label : $this->view->escape($label)) . '"'
-             ;
-
-        if (isset($optionAttribs[$value])) {
-            $attribs = $optionAttribs[$value];
-        }
-        if (!isset($attribs['class'])) {
-            $attribs['class'] = '';
-        }
-        $attribs['class'] .= ' %1$s-option';
-
-        if (isset($selected[$value])) {
-            $attribs['class'] .= ' %1$s-selected';
-        }
-
-        // disabled?
-        if (in_array($value, $disable)) {
-            $attribs['class'] .= ' %1$s-disabled';
-        }
-
-        $attribs['class'] = sprintf($attribs['class'], $namespace);
-
-        $opt .= $this->_htmlAttribs($attribs);
-
-        $opt .= '>' . ($rawLabels ? $label : $this->view->escape($label)) . "</span>";
-
-        return $opt;
+        return $renderer->render($value, $options, $fopts);
     }
 }

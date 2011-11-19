@@ -1,0 +1,17 @@
+
+{% use "form_div_layout.html.twig" with choice_widget as orig_choice_widget %}
+
+{% block fselectmenu_choice_widget %}
+{% spaceless %}
+    {{ fselectmenu(form.get('value'), choices, {
+        'attrs': attr|merge({
+            'id': id~'_html'
+        }),
+        'nativeAttrs': attr|merge({
+            'id': id,
+            'name': name
+        })
+    }) }}
+{% endspaceless %}
+{% endblock fselectmenu_choice_widget %}
+
