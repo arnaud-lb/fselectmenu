@@ -54,7 +54,8 @@ class Renderer
             'fixedLabel' => null,
         ), $options);
 
-        $options['attrs']['class'] .= " fselectmenu fselectmenu-events";
+        $options['attrs']['class'] .= " fselectmenu fselectmenu-events"
+                                . ' ' . $this->valueClass($value);
 
         $options['nativeAttrs']['class'] .= " fselectmenu-native";
 
@@ -63,7 +64,8 @@ class Renderer
         }
 
         $options['optionWrapperAttrs']['class']
-                .= " fselectmenu-options-wrapper fselectmenu-events";
+                .= " fselectmenu-options-wrapper fselectmenu-events"
+                . ' ' . $this->valueClass($value);
 
         // build the fselectmenu element
 
@@ -144,7 +146,8 @@ class Renderer
                     ? $choiceLabel
                     : $this->escape($choiceLabel),
                 'class' => "fselectmenu-option"
-                    . ($value === $choiceValue ? " fselectmenu-selected" : ''),
+                    . ($value === $choiceValue ? " fselectmenu-selected" : '')
+                    .' '.$this->valueClass($choiceValue),
             );
 
             $opt = '<span';
@@ -226,11 +229,18 @@ class Renderer
             $selected = $value === $optValue;
             $html[] .= '<option'
                     .($selected ? ' selected="selected"' : '')
-                    .' value="'.$this->escape($optValue)
-                    .'">'.$this->escape($label).'</option>';
+                    .' value="'.$this->escape($optValue).'"'
+                    .' class="'.$this->escape($this->valueClass($optValue)).'"'
+                    .'>'.$this->escape($label).'</option>';
         }
 
         return \implode('', $html);
+    }
+
+    // http://mathiasbynens.be/notes/html5-id-class
+    private function valueClass($value)
+    {
+        return 'fselectmenu-value-' . \preg_replace('#\s+#', '-', $value);
     }
 
     private function escape($str)

@@ -21,9 +21,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     public function getTestRenderData()
     {
-        $out = function($attrs = null, $in = '') {
+        $valueClass = function($value) {
+            return htmlspecialchars('fselectmenu-value-' . \preg_replace('#\s+#', '-', $value), ENT_QUOTES, 'utf-8');
+        };
+        $out = function($value, $attrs = null, $in = '') use ($valueClass) {
             if (null === $attrs) {
-                $attrs = ' class="fselectmenu-style-default fselectmenu fselectmenu-events" tabindex="0"';
+                $attrs = ' class="fselectmenu-style-default fselectmenu fselectmenu-events ' . $valueClass($value) . '" tabindex="0"';
             }
             return '<span'.$attrs.'>' . $in . '</span>';
         };
@@ -39,9 +42,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             }
             return '<span class="fselectmenu-label-wrapper"><span class="fselectmenu-label">'.$label.'</span><span class="fselectmenu-icon"></span></span>';
         };
-        $opts = function($attrs = null, $opts = '') {
+        $opts = function($value, $attrs = null, $opts = '') use ($valueClass) {
             if (null === $attrs) {
-                $attrs = ' class=" fselectmenu-options-wrapper fselectmenu-events"';
+                $attrs = ' class=" fselectmenu-options-wrapper fselectmenu-events '.$valueClass($value).'"';
             }
             return '<span'.$attrs.'><span class="fselectmenu-options">' . $opts . '</span></span>';
         };
@@ -50,7 +53,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             
             // Empty
             array('', array(), array(),
-                $out(null, $native() . $label() . $opts()),
+                $out('', null, $native() . $label() . $opts('')),
             ),
 
             // A few choices
@@ -61,14 +64,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     'x' => 'X',
                     'z' => 'Z',
                 ), array(),
-                $out(null, $native(null,
-                    '<option value="a">A</option>'
-                    .'<option selected="selected" value="x">X</option>'
-                    .'<option value="z">Z</option>'
-                ) . $label('X') . $opts(null,
-                    '<span data-value="a" data-label="A" class="fselectmenu-option">A</span>'
-                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected">X</span>'
-                    .'<span data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                $out('x', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                    .'<option selected="selected" value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
+                ) . $label('X') . $opts('x', null,
+                    '<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>'
+                    .'<span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
                 )),
             ),
 
@@ -82,18 +85,18 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'z' => 'Z',
                     ),
                 ), array(),
-                $out(null, $native(null,
+                $out('x', null, $native(null,
                     '<optgroup title="a">'
-                    .'<option value="b">B</option>'
-                    .'<option selected="selected" value="x">X</option>'
-                    .'<option value="z">Z</option>'
+                    .'<option value="b" class="fselectmenu-value-b">B</option>'
+                    .'<option selected="selected" value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
                     .'</optgroup>'
-                ) . $label('X') . $opts(null,
+                ) . $label('X') . $opts('x', null,
                     '<span class="fselectmenu-optgroup">'
                     .'<span class="fselectmenu-optgroup-title">a</span>'
-                    .'<span data-value="b" data-label="B" class="fselectmenu-option">B</span>'
-                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected">X</span>'
-                    .'<span data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                    .'<span data-value="b" data-label="B" class="fselectmenu-option fselectmenu-value-b">B</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>'
+                    .'<span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
                     .'</span>'
                 )),
             ),
@@ -106,12 +109,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     'a' => 'A',
                     'x' => 'X',
                 ), array(),
-                $out(null, $native(null,
-                    '<option value="a">A</option>'
-                    .'<option value="x">X</option>'
-                ) . $label('A') . $opts(null,
-                    '<span data-value="a" data-label="A" class="fselectmenu-option">A</span>'
-                    .'<span data-value="x" data-label="X" class="fselectmenu-option">X</span>'
+                $out('', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                    .'<option value="x" class="fselectmenu-value-x">X</option>'
+                ) . $label('A') . $opts('', null,
+                    '<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>'
                 )),
             ),
 
@@ -126,18 +129,18 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'z' => 'Z',
                     ),
                 ), array(),
-                $out(null, $native(null,
+                $out('', null, $native(null,
                     '<optgroup title="a">'
-                    .'<option value="b">B</option>'
-                    .'<option value="x">X</option>'
-                    .'<option value="z">Z</option>'
+                    .'<option value="b" class="fselectmenu-value-b">B</option>'
+                    .'<option value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
                     .'</optgroup>'
-                ) . $label('B') . $opts(null,
+                ) . $label('B') . $opts('', null,
                     '<span class="fselectmenu-optgroup">'
                     .'<span class="fselectmenu-optgroup-title">a</span>'
-                    .'<span data-value="b" data-label="B" class="fselectmenu-option">B</span>'
-                    .'<span data-value="x" data-label="X" class="fselectmenu-option">X</span>'
-                    .'<span data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                    .'<span data-value="b" data-label="B" class="fselectmenu-option fselectmenu-value-b">B</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>'
+                    .'<span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
                     .'</span>'
                 )),
             ),
@@ -150,14 +153,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     '' => 'X',
                     'z' => 'Z',
                 ), array(),
-                $out(null, $native(null,
-                    '<option value="a">A</option>'
-                    .'<option selected="selected" value="">X</option>'
-                    .'<option value="z">Z</option>'
-                ) . $label('X') . $opts(null,
-                    '<span data-value="a" data-label="A" class="fselectmenu-option">A</span>'
-                    .'<span data-value="" data-label="X" class="fselectmenu-option fselectmenu-selected">X</span>'
-                    .'<span data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                $out('', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                    .'<option selected="selected" value="" class="fselectmenu-value-">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
+                ) . $label('X') . $opts('', null,
+                    '<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                    .'<span data-value="" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-">X</span>'
+                    .'<span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
                 )),
             ),
 
@@ -167,7 +170,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'class' => 'fselectmenu-style-foo',
                     ),
                 ),
-                $out(' class="fselectmenu-style-foo fselectmenu fselectmenu-events" tabindex="0"', $native() . $label() . $opts()),
+                $out(null, ' class="fselectmenu-style-foo fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0"', $native() . $label() . $opts('')),
             ),
 
             // Custom tabindex
@@ -176,7 +179,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'tabindex' => '42',
                     ),
                 ),
-                $out(' class="fselectmenu-style-default fselectmenu fselectmenu-events" tabindex="42"', $native() . $label() . $opts()),
+                $out(null, ' class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="42"', $native() . $label() . $opts('')),
             ),
 
             // Options wrapper attrs
@@ -185,7 +188,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'class' => 'foo',
                     ),
                 ),
-                $out(null, $native() . $label() . $opts(' class="foo fselectmenu-options-wrapper fselectmenu-events"')),
+                $out('', null, $native() . $label() . $opts(null, ' class="foo fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-"')),
             ),
 
             // Escape
@@ -196,14 +199,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         '<a>' => '<A>',
                     ),
                 ), array(),
-                $out(null, $native(null,
+                $out('<a>', null, $native(null,
                     '<optgroup title="&lt;o&gt;">'
-                    .'<option selected="selected" value="&lt;a&gt;">&lt;A&gt;</option>'
+                    .'<option selected="selected" value="&lt;a&gt;" class="fselectmenu-value-&lt;a&gt;">&lt;A&gt;</option>'
                     .'</optgroup>'
-                ) . $label('&lt;A&gt;') . $opts(null,
+                ) . $label('&lt;A&gt;') . $opts('<a>', null,
                     '<span class="fselectmenu-optgroup">'
                     .'<span class="fselectmenu-optgroup-title">&lt;o&gt;</span>'
-                    .'<span data-value="&lt;a&gt;" data-label="&amp;lt;A&amp;gt;" class="fselectmenu-option fselectmenu-selected">&lt;A&gt;</span>'
+                    .'<span data-value="&lt;a&gt;" data-label="&amp;lt;A&amp;gt;" class="fselectmenu-option fselectmenu-selected fselectmenu-value-&lt;a&gt;">&lt;A&gt;</span>'
                     .'</span>'
                 )),
             ),
@@ -216,10 +219,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 ), array(
                     'rawLabels' => true,
                 ),
-                $out(null, $native(null,
-                    '<option value="a">&lt;A&gt;</option>'
-                ) . $label('<A>') . $opts(null,
-                    '<span data-value="a" data-label="&lt;A&gt;" class="fselectmenu-option"><A></span>'
+                $out('x', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">&lt;A&gt;</option>'
+                ) . $label('<A>') . $opts('x', null,
+                    '<span data-value="a" data-label="&lt;A&gt;" class="fselectmenu-option fselectmenu-value-a"><A></span>'
                 )),
             ),
 
@@ -231,10 +234,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 ), array(
                     'fixedLabel' => 'foo',
                 ),
-                $out(' class="fselectmenu-style-default fselectmenu fselectmenu-events" tabindex="0" data-fixedlabel="foo"', $native(null,
-                    '<option value="a">A</option>'
-                ) . $label('foo') . $opts(null,
-                    '<span data-value="a" data-label="A" class="fselectmenu-option">A</span>'
+                $out(null, ' class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0" data-fixedlabel="foo"', $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('foo') . $opts('', null,
+                    '<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
                 )),
             ),
 
@@ -251,14 +254,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'z' => array('bar' => 'foo'),
                     ),
                 ),
-                $out(null, $native(null,
-                    '<option value="a">A</option>'
-                    .'<option selected="selected" value="x">X</option>'
-                    .'<option value="z">Z</option>'
-                ) . $label('X') . $opts(null,
-                    '<span foo="bar" data-value="a" data-label="A" class="fselectmenu-option">A</span>'
-                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected">X</span>'
-                    .'<span bar="foo" data-value="z" data-label="Z" class="fselectmenu-option">Z</span>'
+                $out('x', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                    .'<option selected="selected" value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
+                ) . $label('X') . $opts('x', null,
+                    '<span foo="bar" data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>'
+                    .'<span bar="foo" data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
                 )),
             ),
 
@@ -272,18 +275,18 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                         'z' => 'Z',
                     ),
                 ), array(),
-                $out(null, $native(null,
+                $out('x', null, $native(null,
                     '<optgroup title="tr_a">'
-                    .'<option value="b">tr_B</option>'
-                    .'<option selected="selected" value="x">tr_X</option>'
-                    .'<option value="z">tr_Z</option>'
+                    .'<option value="b" class="fselectmenu-value-b">tr_B</option>'
+                    .'<option selected="selected" value="x" class="fselectmenu-value-x">tr_X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">tr_Z</option>'
                     .'</optgroup>'
-                ) . $label('tr_X') . $opts(null,
+                ) . $label('tr_X') . $opts('x', null,
                     '<span class="fselectmenu-optgroup">'
                     .'<span class="fselectmenu-optgroup-title">tr_a</span>'
-                    .'<span data-value="b" data-label="tr_B" class="fselectmenu-option">tr_B</span>'
-                    .'<span data-value="x" data-label="tr_X" class="fselectmenu-option fselectmenu-selected">tr_X</span>'
-                    .'<span data-value="z" data-label="tr_Z" class="fselectmenu-option">tr_Z</span>'
+                    .'<span data-value="b" data-label="tr_B" class="fselectmenu-option fselectmenu-value-b">tr_B</span>'
+                    .'<span data-value="x" data-label="tr_X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">tr_X</span>'
+                    .'<span data-value="z" data-label="tr_Z" class="fselectmenu-option fselectmenu-value-z">tr_Z</span>'
                     .'</span>'
                 )),
                 new ArrayTranslator(array(
