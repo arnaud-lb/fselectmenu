@@ -37,7 +37,7 @@ Install
 $ git submodule add git://github.com/arnaud-lb.git vendor/fselectmenu
 ```
 
-## Plain PHP
+### Plain PHP
 
 You can render a FSelectMenu with the FSelectMenu\Renderer class:
 
