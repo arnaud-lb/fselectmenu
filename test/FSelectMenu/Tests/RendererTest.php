@@ -297,6 +297,24 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 )),
             ),
 
+            // Numeric keys with string value
+            array(
+                '1',
+                array(
+                    0 => 'A',
+                    1 => 'X',
+                    2 => 'Z',
+                ), array(),
+                $out('1', null, $native(null,
+                    '<option value="0" class="fselectmenu-value-0">A</option>'
+                    .'<option selected="selected" value="1" class="fselectmenu-value-1">X</option>'
+                    .'<option value="2" class="fselectmenu-value-2">Z</option>'
+                ) . $label('X') . $opts('1', null,
+                    '<span data-value="0" data-label="A" class="fselectmenu-option fselectmenu-value-0">A</span>'
+                    .'<span data-value="1" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-1">X</span>'
+                    .'<span data-value="2" data-label="Z" class="fselectmenu-option fselectmenu-value-2">Z</span>'
+                )),
+            ),
         );
     }
 }

@@ -146,7 +146,7 @@ class Renderer
                     ? $choiceLabel
                     : $this->escape($choiceLabel),
                 'class' => "fselectmenu-option"
-                    . ($value === $choiceValue ? " fselectmenu-selected" : '')
+                    . ($value === (string) $choiceValue ? " fselectmenu-selected" : '')
                     .' '.$this->valueClass($choiceValue),
             );
 
@@ -175,7 +175,7 @@ class Renderer
                     if (null === $selectedLabel) {
                         $selectedLabel = $cLabel;
                     }
-                    if ($value === $cValue) {
+                    if ($value === (string) $cValue) {
                         $selectedLabel = $cLabel;
                         break 2;
                     }
@@ -184,7 +184,7 @@ class Renderer
                 if (null === $selectedLabel) {
                     $selectedLabel = $choiceLabel;
                 }
-                if ($value === $choiceValue) {
+                if ($value === (string) $choiceValue) {
                     $selectedLabel = $choiceLabel;
                     break;
                 }
@@ -226,7 +226,7 @@ class Renderer
 
             $label = $this->translator->trans($optLabel);
 
-            $selected = $value === $optValue;
+            $selected = $value === (string) $optValue;
             $html[] .= '<option'
                     .($selected ? ' selected="selected"' : '')
                     .' value="'.$this->escape($optValue).'"'
