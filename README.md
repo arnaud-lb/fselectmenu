@@ -37,6 +37,34 @@ Install
 $ git submodule add git://github.com/arnaud-lb.git vendor/fselectmenu
 ```
 
+## Plain PHP
+
+You can render a FSelectMenu with the FSelectMenu\Renderer class:
+
+``` php
+<?php
+
+$renderer = new FSelectMenu\Renderer;
+echo $renderer->render($value, $choices, $options);
+```
+
+ - $value is the value of the selected choice
+ - $choices is an array of value => label choices (with nested arrays, for optgroups)
+ - $options is an array with the following keys:
+   - attrs: fselectmenu element attributes (e.g. id, class, ...)
+   - nativeAttrs: native select element attributes (e.g. id, name)
+   - optionAttrs: choice elements attributes (array of value => attributes)
+   - optionWrapperAttrs: choice elements wrapper attributes
+   - rawLabels: whether to escape labels
+   - fixedLabel: a label that will always be displayed instead of the selected label
+
+Example:
+
+``` php
+<?php
+echo $renderer->render('x', array('x' => 'Foo', 'y' => 'Bar'), array('nativeAttrs' => array('name' => 'foo')));
+```
+
 ### Twig
 
 Register the extension:
@@ -51,15 +79,7 @@ The extension exposes the `fselectmenu` method:
 
     fselectmenu(value, choices, options)
 
- - value is the value of the selected choice
- - choices is an array of value => label choices (with nested arrays, for optgroups)
- - options is an array with the following keys:
-   - attrs: fselectmenu element attributes (e.g. id, class, ...)
-   - nativeAttrs: native select element attributes (e.g. id, name)
-   - optionAttrs: choice elements attributes (array of value => attributes)
-   - optionWrapperAttrs: choice elements wrapper attributes
-   - rawLabels: whether to escape labels
-   - fixedLabel: a label that will always be displayed instead of the selected label
+See Plain PHP above for a description of the parameters.
 
 Example:
 
