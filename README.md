@@ -34,7 +34,7 @@ Install
 -------
 
 ```
-$ git submodule add git://github.com/arnaud-lb.git vendor/fselectmenu
+$ git submodule add git://github.com/arnaud-lb/fselectmenu.git vendor/fselectmenu
 ```
 
 ### Plain PHP
