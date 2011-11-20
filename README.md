@@ -160,3 +160,17 @@ class App_Form_Element_FSelectMenu extends Zend_Form_Element_Select
 ### Styling
 
 FSelectMenu comes with a minimal (behavior only) stylesheet at `lib/FSelectMenu/Bundle/Resources/sass/_fselectmenu.sass`.
+
+### Graceful degradation
+
+Support for clients without javascript enabled can be achieved by hidding the fake select menu and displaying the native one:
+
+``` html
+<noscript>
+    <style>
+        .fselectmenu-label-wrapper { display: none; }
+        .fselectmenu-native { display: inline; }
+    </style>
+</noscript>
+```
+
