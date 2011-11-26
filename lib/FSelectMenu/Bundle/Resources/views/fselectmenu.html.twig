@@ -5,7 +5,7 @@
 {% spaceless %}
 
     {% if empty_value is not none %}
-        {% set choices = {"": empty_value}|merge(choices) %}
+        {% set choices = {"": empty_value} + choices %}
     {% endif %}
 
     {{ fselectmenu(form.get('value'), choices, {
