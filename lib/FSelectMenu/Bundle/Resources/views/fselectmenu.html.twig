@@ -15,7 +15,10 @@
         'nativeAttrs': attr|merge({
             'id': id,
             'name': full_name
-        })
+        }),
+        'optionWrapperAttrs': {
+            'id': id~'_options',
+        }
     }) }}
 {% endspaceless %}
 {% endblock fselectmenu_choice_widget %}
