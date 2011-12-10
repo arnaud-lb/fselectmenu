@@ -50,7 +50,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         };
 
         return array(
-            
+            /*
             // Empty
             array('', array(), array(),
                 $out('', null, $native() . $label() . $opts('')),
@@ -315,6 +315,30 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     .'<span data-value="2" data-label="Z" class="fselectmenu-option fselectmenu-value-2">Z</span>'
                 )),
             ),
+*/
+
+            // Some disabled values
+            array(
+                'x',
+                array(
+                    'a' => 'A',
+                    'x' => 'X',
+                    'z' => 'Z',
+                ), array(
+                    'disabledValues' => array('x'),
+                ),
+                $out('x', null, $native(null,
+                    '<option value="a" class="fselectmenu-value-a">A</option>'
+                    .'<option selected="selected" disabled="disabled" value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="z" class="fselectmenu-value-z">Z</option>'
+                ) . $label('X') . $opts('x', null,
+                    '<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                    .'<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-disabled fselectmenu-value-x">X</span>'
+                    .'<span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>'
+                )),
+            ),
+
+
         );
     }
 }
