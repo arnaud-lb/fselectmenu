@@ -53,6 +53,9 @@ class Renderer
             // always display this label
             'fixedLabel' => null,
             'disabledValues' => array(),
+            'emptyLabel' => null,
+            'preferredChoices' => array(),
+            'separator' => '-------------------',
         ), $options);
 
         $options['attrs']['class'] .= " fselectmenu fselectmenu-events"
@@ -87,12 +90,19 @@ class Renderer
         }
         $html[] = '>';
         $html[] = $this->buildNativeElement($options['nativeAttrs']
-                , $choices, $value, $options['disabledValues']);
+                , $options['emptyLabel'], $options['preferredChoices']
+                , $choices
+                , $options['separator']
+                , $value
+                , $options['disabledValues']);
 
         if (null !== $options['fixedLabel']) {
             $label = $options['fixedLabel'];
         } else {
-            $label = $this->getSelectedLabel($choices, $value);
+            $label = $this->getSelectedLabel(
+                $options['emptyLabel']
+                , $options['preferredChoices']
+                , $choices, $value);
         }
         $label = $this->translator->trans($label);
 
@@ -112,6 +122,22 @@ class Renderer
                     .'="'.$this->escape($attrValue).'"';
         }
         $html[] = '><span class="fselectmenu-options">';
+
+        if (null !== $options['emptyLabel']) {
+            $html[] = $this->buildChoices(array('' => $options['emptyLabel'])
+                , $value
+                , $options['rawLabels'], $options['optionAttrs']
+                , $options['disabledValues']);
+        }
+
+        if (count($options['preferredChoices']) > 0) {
+            $html[] = $this->buildChoices($options['preferredChoices'], $value
+                    , $options['rawLabels'], $options['optionAttrs']
+                    , $options['disabledValues']);
+            if (null !== $options['separator']) {
+                $html[] = '<span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">' . ($options['rawLabels'] ? $options['separator'] : $this->escape($options['separator'])) . '</span>';
+            }
+        }
 
         $html[] = $this->buildChoices($choices, $value
                 , $options['rawLabels'], $options['optionAttrs']
@@ -172,10 +198,23 @@ class Renderer
         return \implode('', $html);
     }
 
-    private function getSelectedLabel($choices, $value)
+    private function getSelectedLabel($emptyLabel, $preferredChoices, $choices, $value)
     {
-        $selectedLabel = null;
+        if (null !== $emptyLabel && '' === (string) $value) {
+            return $emptyLabel;
+        }
 
+        $label = $this->getSelectedLabelFromChoices($preferredChoices, $value, null, $found);
+
+        if (!$found) {
+            $label = $this->getSelectedLabelFromChoices($choices, $value, $label);
+        }
+
+        return $label;
+    }
+
+    private function getSelectedLabelFromChoices($choices, $value, $selectedLabel = null, &$found = false)
+    {
         foreach ($choices as $choiceValue => $choiceLabel) {
             if (\is_array($choiceLabel)) {
                 foreach ($choiceLabel as $cValue => $cLabel) {
@@ -184,6 +223,7 @@ class Renderer
                     }
                     if ($value === (string) $cValue) {
                         $selectedLabel = $cLabel;
+                        $found = true;
                         break 2;
                     }
                 }
@@ -193,6 +233,7 @@ class Renderer
                 }
                 if ($value === (string) $choiceValue) {
                     $selectedLabel = $choiceLabel;
+                    $found = true;
                     break;
                 }
             }
@@ -201,7 +242,7 @@ class Renderer
         return $selectedLabel;
     }
 
-    private function buildNativeElement($attrs, $choices, $value, $disabledValues)
+    private function buildNativeElement(array $attrs, $emptyLabel, array $preferredChoices, array $choices, $separator, $value, array $disabledValues)
     {
         $html = array();
 
@@ -211,13 +252,25 @@ class Renderer
                     .'="'.$this->escape($attrValue).'"';
         }
         $html[] = '>';
+
+        if (null !== $emptyLabel) {
+            $html[] = $this->buildNativeChoices(array('' => $emptyLabel), $value, $disabledValues);
+        }
+
+        if (count($preferredChoices) > 0) {
+            $html[] = $this->buildNativeChoices($preferredChoices, $value, $disabledValues);
+            if (null !== $separator) {
+                $html[] = '<option value="" disabled="disabled">' . $this->escape($separator) . '</option>';
+            }
+        }
+
         $html[] = $this->buildNativeChoices($choices, $value, $disabledValues);
         $html[] = '</select>';
 
         return \implode('', $html);
     }
 
-    private function buildNativeChoices($choices, $value, $disabledValues)
+    private function buildNativeChoices(array $choices, $value, array $disabledValues)
     {
         $html = array();
 

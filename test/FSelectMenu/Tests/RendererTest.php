@@ -50,7 +50,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         };
 
         return array(
-            /*
             // Empty
             array('', array(), array(),
                 $out('', null, $native() . $label() . $opts('')),
@@ -315,7 +314,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                     .'<span data-value="2" data-label="Z" class="fselectmenu-option fselectmenu-value-2">Z</span>'
                 )),
             ),
-*/
 
             // Some disabled values
             array(
@@ -338,8 +336,105 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 )),
             ),
 
+            // Emtpy label
+            array(
+                '',
+                array(
+                    'a' => 'A',
+                ), array(
+                    'emptyLabel' => 'Choose some',
+                ),
+                $out('', null, $native(null,
+                    '<option selected="selected" value="" class="fselectmenu-value-">Choose some</option>'
+                    .'<option value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('Choose some') . $opts('', null,
+                    '<span data-value="" data-label="Choose some" class="fselectmenu-option fselectmenu-selected fselectmenu-value-">Choose some</span>'
+                    .'<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                )),
+            ),
+
+            // Emtpy label, not selected
+            array(
+                'a',
+                array(
+                    'a' => 'A',
+                ), array(
+                    'emptyLabel' => 'Choose some',
+                ),
+                $out('a', null, $native(null,
+                    '<option value="" class="fselectmenu-value-">Choose some</option>'
+                    .'<option selected="selected" value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('A') . $opts('a', null,
+                    '<span data-value="" data-label="Choose some" class="fselectmenu-option fselectmenu-value-">Choose some</span>'
+                    .'<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-selected fselectmenu-value-a">A</span>'
+                )),
+            ),
+
+            // Preferred choices
+            array(
+                '',
+                array(
+                    'a' => 'A',
+                ), array(
+                    'preferredChoices' => array(
+                        'x' => 'X',
+                    ),
+                ),
+                $out('', null, $native(null,
+                    '<option value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="" disabled="disabled">-------------------</option>'
+                    .'<option value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('X') . $opts('', null,
+                    '<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>'
+                    .'<span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>'
+                    .'<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                )),
+            ),
+
+            // Preferred choices; preferred selected
+            array(
+                'x',
+                array(
+                    'a' => 'A',
+                ), array(
+                    'preferredChoices' => array(
+                        'x' => 'X',
+                    ),
+                ),
+                $out('x', null, $native(null,
+                    '<option selected="selected" value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="" disabled="disabled">-------------------</option>'
+                    .'<option value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('X') . $opts('x', null,
+                    '<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>'
+                    .'<span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>'
+                    .'<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>'
+                )),
+            ),
+
+            // Preferred choices; other selected
+            array(
+                'a',
+                array(
+                    'a' => 'A',
+                ), array(
+                    'preferredChoices' => array(
+                        'x' => 'X',
+                    ),
+                ),
+                $out('a', null, $native(null,
+                    '<option value="x" class="fselectmenu-value-x">X</option>'
+                    .'<option value="" disabled="disabled">-------------------</option>'
+                    .'<option selected="selected" value="a" class="fselectmenu-value-a">A</option>'
+                ) . $label('A') . $opts('a', null,
+                    '<span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>'
+                    .'<span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>'
+                    .'<span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-selected fselectmenu-value-a">A</span>'
+                )),
+            ),
 
         );
+
     }
 }
 

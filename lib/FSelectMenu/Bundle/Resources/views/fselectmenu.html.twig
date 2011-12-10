@@ -4,10 +4,6 @@
 {% block fselectmenu_choice_widget %}
 {% spaceless %}
 
-    {% if empty_value is not none %}
-        {% set choices = {"": empty_value} + choices %}
-    {% endif %}
-
     {{ fselectmenu(form.get('value'), choices, {
         'attrs': attr|merge({
             'id': id~'_html'
@@ -18,7 +14,10 @@
         }),
         'optionWrapperAttrs': {
             'id': id~'_options',
-        }
+        },
+        'emptyLabel': empty_value,
+        'separator': separator,
+        'preferredChoices': preferred_choices
     }) }}
 {% endspaceless %}
 {% endblock fselectmenu_choice_widget %}
