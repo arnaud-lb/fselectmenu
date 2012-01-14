@@ -1,6 +1,8 @@
 FSelectMenu
 ===========
 
+[![Build Status](https://secure.travis-ci.org/arnaud-lb/fselectmenu.png)](http://travis-ci.org/arnaud-lb/fselectmenu)
+
 FSelectMenu is a Fast and non-intrusive HTML select menu.
 
 ## Features:
