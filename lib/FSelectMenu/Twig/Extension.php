@@ -29,7 +29,7 @@ class Extension extends \Twig_Extension
             $renderer = $this->renderer = new Renderer($env->getCharset(), $this->translator);
         }
 
-        return new \Twig_Markup($renderer->render($value, $choices, $options));
+        return new \Twig_Markup($renderer->render($value, $choices, $options), $env->getCharset());
     }
 
     public function getName()
