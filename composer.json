@@ -17,7 +17,7 @@
         "symfony/class-loader": "v2.0.9"
     },
     "autoload": {
-        "prs-0": {
+        "psr-0": {
             "FSelectMenu\\": "lib/"
         }
     }
