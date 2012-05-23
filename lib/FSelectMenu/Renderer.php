@@ -2,6 +2,8 @@
 
 namespace FSelectMenu;
 
+use Symfony\Component\Form\Extension\Core\View\ChoiceView;
+
 use FSelectMenu\Translator\ArrayTranslator;
 
 class Renderer
@@ -104,7 +106,12 @@ class Renderer
                 , $options['preferredChoices']
                 , $choices, $value);
         }
-        $label = $this->translator->trans($label);
+        
+        if ($label instanceof ChoiceView) {
+            $label = $this->translator->trans($label->getLabel());
+        } else {
+            $label = $this->translator->trans($label);
+        }
 
         // fixes rendering issues when the label is empty
         $label = $label ?: "\xC2\xA0"; // &nbsp;
@@ -164,7 +171,11 @@ class Renderer
                 continue;
             }
 
-            $choiceLabel = $this->translator->trans($choiceLabel);
+            if ($choiceLabel instanceof ChoiceView) {
+                $choiceLabel = $this->translator->trans($choiceLabel->getLabel());
+            } else {
+                $choiceLabel = $this->translator->trans($choiceLabel);
+            }
 
             if (isset($optionAttrs[$choiceValue])) {
                 $attrs = $optionAttrs[$choiceValue];
@@ -283,9 +294,13 @@ class Renderer
                 $html[] = '</optgroup>';
                 continue;
             }
-
-            $label = $this->translator->trans($optLabel);
-
+            
+            if ($optLabel instanceof ChoiceView) {
+                $label = $this->translator->trans($optLabel->getLabel());
+            } else {
+                $label = $this->translator->trans($optLabel);
+            }
+            
             $selected = $value === (string) $optValue;
             $disabled = isset($disabledValues[$optValue]);
 
