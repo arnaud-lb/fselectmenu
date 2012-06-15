@@ -4,7 +4,7 @@
 {% block fselectmenu_choice_widget %}
 {% spaceless %}
 
-    {{ fselectmenu(form.get('value'), choices, {
+    {{ fselectmenu(form.getVar('value'), choices, {
         'attrs': attr|merge({
             'id': id~'_html'
         }),
