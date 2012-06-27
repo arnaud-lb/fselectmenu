@@ -1,9 +1,21 @@
 {
-    "hash": "30f19613073d1093893083d2971d28d0",
+    "hash": "94fb54066f3bd33eeaa37e048088728e",
     "packages": [
 
     ],
     "packages-dev": [
+        {
+            "package": "symfony/process",
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "symfony/process",
+            "version": "dev-master",
+            "source-reference": "v2.1.0-BETA1",
+            "commit-date": "1337882028"
+        },
         {
             "package": "symfony/yaml",
             "version": "dev-master",

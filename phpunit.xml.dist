@@ -24,6 +24,6 @@
   </filter>
     
   <php>
-      <server name="__TESTENV_NODE_JS_BIN" value="" />
+      <server name="__TESTENV_NODE_JS_BIN" value="node" />
   </php>
 </phpunit>
