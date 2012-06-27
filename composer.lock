@@ -1,1 +1,27 @@
-{"hash":"58261084bb0828982233b32e4a7d1a2a","packages":[{"package":"symfony\/class-loader","version":"v2.0.9"}]}
+{
+    "hash": "30f19613073d1093893083d2971d28d0",
+    "packages": [
+
+    ],
+    "packages-dev": [
+        {
+            "package": "symfony/yaml",
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
+        },
+        {
+            "package": "symfony/yaml",
+            "version": "dev-master",
+            "source-reference": "v2.1.0-BETA1",
+            "commit-date": "1339592252"
+        }
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}
