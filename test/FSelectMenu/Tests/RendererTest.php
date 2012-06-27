@@ -24,7 +24,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     public function provideRenderTestData()
     {
-        $data = array_values(Yaml::parse(__DIR__ . '/render-test-data.yaml'));
+        $data = array_values(Yaml::parse(__DIR__ . '/files/render-test-data.yaml'));
         foreach ($data as &$case) {
             $case['output'] = trim($case['output']);
             if ($case['translator']) {

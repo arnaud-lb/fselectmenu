@@ -8,51 +8,6 @@ use FSelectMenu\Renderer;
 
 class JsRendererTest extends \PHPUnit_Framework_TestCase
 {
-    private $javascriptRendererCode = <<<'EOF'
-var fs = require('fs');
-var vm = require('vm');
-
-var rendererValue = "%s";
-var rendererChoices = %s;
-var rendererOptions = %s;
-var translator = (function(data) {
-    return {
-        trans: function(key) {
-            return typeof(data[key]) == 'undefined' ? key : data[key];
-        }
-    };
-})(%s);
-var rendererFileContent = fs.readFileSync("%s", 'utf8');
-
-var sandbox = {
-    console: console,
-    
-    renderer: null,
-    
-    rendererValue: rendererValue,
-    rendererChoices: rendererChoices,
-    rendererOptions: rendererOptions,
-    translator: translator
-};
-
-// window
-sandbox.window = sandbox;
-
-// create a context for the vm using the sandbox data
-var context = vm.createContext(sandbox);
-
-// load fake requirejs
-vm.runInContext('define = function(func) { renderer = func(); };', context, 'requirejs.js');
-
-// load renderer code
-vm.runInContext(rendererFileContent, context, 'renderer.js');
-
-vm.runInContext('renderer.translator = translator', context, 'translator.js');
-
-//run renderer.render()
-vm.runInContext('console.log(renderer.render(rendererValue, rendererChoices, rendererOptions));', context, 'test.js');
-EOF;
-    
     /** 
      * @dataProvider provideRenderTestData 
      */
@@ -63,7 +18,7 @@ EOF;
         }
         
         $executeFile = tempnam(sys_get_temp_dir(), 'fselectmenu-test');
-        file_put_contents($executeFile, sprintf($this->javascriptRendererCode,
+        file_put_contents($executeFile, sprintf(file_get_contents(__DIR__.'/files/renderer-sandbox.js'),
             $value,
             json_encode($choices),
             json_encode($options),
@@ -95,7 +50,7 @@ EOF;
 
     public function provideRenderTestData()
     {
-        $data = array_values(Yaml::parse(__DIR__ . '/render-test-data.yaml'));
+        $data = array_values(Yaml::parse(__DIR__ . '/files/render-test-data.yaml'));
         foreach ($data as &$case) {
             $case['output'] = trim($case['output']);
             $case['translator'] = $case['translator'] ?: array();
