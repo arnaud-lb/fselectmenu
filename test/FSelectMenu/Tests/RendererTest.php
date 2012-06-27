@@ -18,7 +18,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $result = str_replace('><', ">\n<", $result);
 
-        $this->assertXmlStringEqualsXmlString($expect, $result);
+        $encoding = '<?xml version="1.0" encoding="utf-8"?>';
+        $this->assertXmlStringEqualsXmlString($encoding.$expect, $encoding.$result);
     }
 
     public function provideRenderTestData()

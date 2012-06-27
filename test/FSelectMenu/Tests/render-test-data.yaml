@@ -7,7 +7,7 @@
         <select class=" fselectmenu-native">
         </select>
         <span class="fselectmenu-label-wrapper">
-        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-label">&#x00A0;</span>
         <span class="fselectmenu-icon">
         </span>
         </span>
@@ -165,7 +165,7 @@
         <select class=" fselectmenu-native">
         </select>
         <span class="fselectmenu-label-wrapper">
-        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-label">&#x00A0;</span>
         <span class="fselectmenu-icon">
         </span>
         </span>
@@ -185,7 +185,7 @@
         <select class=" fselectmenu-native">
         </select>
         <span class="fselectmenu-label-wrapper">
-        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-label">&#x00A0;</span>
         <span class="fselectmenu-icon">
         </span>
         </span>
@@ -205,7 +205,7 @@
         <select class=" fselectmenu-native">
         </select>
         <span class="fselectmenu-label-wrapper">
-        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-label">&#x00A0;</span>
         <span class="fselectmenu-icon">
         </span>
         </span>
