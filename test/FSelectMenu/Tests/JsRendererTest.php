@@ -47,7 +47,7 @@ EOF;
     /** 
      * @dataProvider provideRenderTestData 
      */
-    public function testRender($value, $choices, $options, $expect, $translator = null)
+    public function testRender($value, $choices, $options, $expect)
     {
         if (empty($_SERVER['__TESTENV_NODE_JS_BIN'])) {
             $this->markTestSkipped('The test required node js bin to be configured in phpunit.xml');
@@ -79,7 +79,8 @@ EOF;
 
         $result = str_replace('><', ">\n<", $proc->getOutput());
         
-        $this->assertXmlStringEqualsXmlString($expect, $result);
+        $encoding = '<?xml version="1.0" encoding="utf-8"?>';
+        $this->assertXmlStringEqualsXmlString($encoding.$expect, $encoding.$result);
     }
 
     public function provideRenderTestData()
