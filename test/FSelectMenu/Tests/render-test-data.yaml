@@ -1,0 +1,527 @@
+0 -  Empty Choices:
+    value: ''
+    choices: {  }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        </span>
+        </span>
+        </span>
+    translator: null 
+    
+1- A few choices:
+    value: x
+    choices: { a: A, x: X, z: Z }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        <option selected="selected" value="x" class="fselectmenu-value-x">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>
+        <span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+2- A few choices with optgroup:
+    value: x
+    choices: { a: { b: B, x: X, z: Z } }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <optgroup title="a">
+        <option value="b" class="fselectmenu-value-b">B</option>
+        <option selected="selected" value="x" class="fselectmenu-value-x">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </optgroup>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span class="fselectmenu-optgroup">
+        <span class="fselectmenu-optgroup-title">a</span>
+        <span data-value="b" data-label="B" class="fselectmenu-option fselectmenu-value-b">B</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>
+        <span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+3- A few choices, value not in choices. The label should be the first choice:
+    value: ''
+    choices: { a: A, x: X }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        <option value="x" class="fselectmenu-value-x">X</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">A</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+4 - A few choices with optgroup, value not in choices. The label should be the first choice:
+    value: ''
+    choices: { a: { b: B, x: X, z: Z } }
+    options: {  }
+    output: | 
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        <optgroup title="a">
+        <option value="b" class="fselectmenu-value-b">B</option>
+        <option value="x" class="fselectmenu-value-x">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </optgroup>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">B</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span class="fselectmenu-optgroup">
+        <span class="fselectmenu-optgroup-title">a</span>
+        <span data-value="b" data-label="B" class="fselectmenu-option fselectmenu-value-b">B</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>
+        <span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+5 - A few choices, value is empty:
+    value: ''
+    choices: { a: A, '': X, z: Z }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        <option selected="selected" value="" class="fselectmenu-value-">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        <span data-value="" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-">X</span>
+        <span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+6 - Custom class:
+    value: ''
+    choices: {  }
+    options: { attrs: { class: fselectmenu-style-foo } }
+    output: | 
+        <span class="fselectmenu-style-foo fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+7 - Custom tabindex: 
+    value: ''
+    choices: {  }
+    options: { attrs: { tabindex: '42' } }
+    output: | 
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="42">
+        <select class=" fselectmenu-native">
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+8 - Options wrapper attrs:
+    value: ''
+    choices: {  }
+    options: { optionWrapperAttrs: { class: foo } }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">&#xA0;</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class="foo fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+9 - Escape:
+    value: '<a>'
+    choices: { '<o>': { '<a>': '<A>' } }
+    options: {  }
+    output: | 
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-&lt;a&gt;" tabindex="0">
+        <select class=" fselectmenu-native">
+        <optgroup title="&lt;o&gt;">
+        <option selected="selected" value="&lt;a&gt;" class="fselectmenu-value-&lt;a&gt;">&lt;A&gt;</option>
+        </optgroup>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">&lt;A&gt;</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-&lt;a&gt;">
+        <span class="fselectmenu-options">
+        <span class="fselectmenu-optgroup">
+        <span class="fselectmenu-optgroup-title">&lt;o&gt;</span>
+        <span data-value="&lt;a&gt;" data-label="&amp;lt;A&amp;gt;" class="fselectmenu-option fselectmenu-selected fselectmenu-value-&lt;a&gt;">&lt;A&gt;</span>
+        </span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+10 - Escape. Raw labels: 
+    value: x
+    choices: { a: '<A />' }
+    options: { rawLabels: true }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">&lt;A /&gt;</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">
+        <A />
+        </span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="&lt;A /&gt;" class="fselectmenu-option fselectmenu-value-a">
+        <A />
+        </span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+11 - Fixed label: 
+    value: ''
+    choices: { a: A }
+    options: { fixedLabel: foo }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0" data-fixedlabel="foo">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">foo</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+
+12 - Option attribs: 
+    value: x
+    choices: { a: A, x: X, z: Z }
+    options: { optionAttrs: { a: { foo: bar }, z: { bar: foo } } }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        <option selected="selected" value="x" class="fselectmenu-value-x">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span foo="bar" data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>
+        <span bar="foo" data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+
+13 - Translation:
+    value: x
+    choices: { a: { b: B, x: X, z: Z } }
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <optgroup title="tr_a">
+        <option value="b" class="fselectmenu-value-b">tr_B</option>
+        <option selected="selected" value="x" class="fselectmenu-value-x">tr_X</option>
+        <option value="z" class="fselectmenu-value-z">tr_Z</option>
+        </optgroup>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">tr_X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span class="fselectmenu-optgroup">
+        <span class="fselectmenu-optgroup-title">tr_a</span>
+        <span data-value="b" data-label="tr_B" class="fselectmenu-option fselectmenu-value-b">tr_B</span>
+        <span data-value="x" data-label="tr_X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">tr_X</span>
+        <span data-value="z" data-label="tr_Z" class="fselectmenu-option fselectmenu-value-z">tr_Z</span>
+        </span>
+        </span>
+        </span>
+        </span>
+    translator: { a: tr_a, B: tr_B, X: tr_X, Z: tr_Z }
+    
+14 - Numeric keys with string value:
+    value: '1'
+    choices: [A, X, Z]
+    options: {  }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-1" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="0" class="fselectmenu-value-0">A</option>
+        <option selected="selected" value="1" class="fselectmenu-value-1">X</option>
+        <option value="2" class="fselectmenu-value-2">Z</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-1">
+        <span class="fselectmenu-options">
+        <span data-value="0" data-label="A" class="fselectmenu-option fselectmenu-value-0">A</span>
+        <span data-value="1" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-1">X</span>
+        <span data-value="2" data-label="Z" class="fselectmenu-option fselectmenu-value-2">Z</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+15 - Some disabled values:
+    value: x
+    choices: { a: A, x: X, z: Z }
+    options: { disabledValues: [x] }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="a" class="fselectmenu-value-a">A</option>
+        <option selected="selected" disabled="disabled" value="x" class="fselectmenu-value-x">X</option>
+        <option value="z" class="fselectmenu-value-z">Z</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-disabled fselectmenu-value-x">X</span>
+        <span data-value="z" data-label="Z" class="fselectmenu-option fselectmenu-value-z">Z</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+16 - Emtpy label:
+    value: ''
+    choices: { a: A }
+    options: { emptyLabel: 'Choose some' }
+    output: | 
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option selected="selected" value="" class="fselectmenu-value-">Choose some</option>
+        <option value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">Choose some</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span data-value="" data-label="Choose some" class="fselectmenu-option fselectmenu-selected fselectmenu-value-">Choose some</span>
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+17 - Emtpy label, not selected:
+    value: a
+    choices: { a: A }
+    options: { emptyLabel: 'Choose some' }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-a" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="" class="fselectmenu-value-">Choose some</option>
+        <option selected="selected" value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">A</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-a">
+        <span class="fselectmenu-options">
+        <span data-value="" data-label="Choose some" class="fselectmenu-option fselectmenu-value-">Choose some</span>
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-selected fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+18 - Preferred choices:
+    value: ''
+    choices: { a: A }
+    options: { preferredChoices: { x: X } }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="x" class="fselectmenu-value-x">X</option>
+        <option value="" disabled="disabled">-------------------</option>
+        <option value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-">
+        <span class="fselectmenu-options">
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>
+        <span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+19 - Preferred choices; preferred selected:
+    value: x
+    choices: { a: A }
+    options: { preferredChoices: { x: X } }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-x" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option selected="selected" value="x" class="fselectmenu-value-x">X</option>
+        <option value="" disabled="disabled">-------------------</option>
+        <option value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">X</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-x">
+        <span class="fselectmenu-options">
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-selected fselectmenu-value-x">X</span>
+        <span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
+    
+20 - Preferred choices; other selected:
+    value: a
+    choices: { a: A }
+    options: { preferredChoices: { x: X } }
+    output: |
+        <span class="fselectmenu-style-default fselectmenu fselectmenu-events fselectmenu-value-a" tabindex="0">
+        <select class=" fselectmenu-native">
+        <option value="x" class="fselectmenu-value-x">X</option>
+        <option value="" disabled="disabled">-------------------</option>
+        <option selected="selected" value="a" class="fselectmenu-value-a">A</option>
+        </select>
+        <span class="fselectmenu-label-wrapper">
+        <span class="fselectmenu-label">A</span>
+        <span class="fselectmenu-icon">
+        </span>
+        </span>
+        <span class=" fselectmenu-options-wrapper fselectmenu-events fselectmenu-value-a">
+        <span class="fselectmenu-options">
+        <span data-value="x" data-label="X" class="fselectmenu-option fselectmenu-value-x">X</span>
+        <span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">-------------------</span>
+        <span data-value="a" data-label="A" class="fselectmenu-option fselectmenu-selected fselectmenu-value-a">A</span>
+        </span>
+        </span>
+        </span>
+    translator: null
