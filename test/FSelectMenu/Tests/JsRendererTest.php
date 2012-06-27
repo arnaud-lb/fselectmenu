@@ -5,7 +5,6 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Process\ProcessBuilder;
 
 use FSelectMenu\Renderer;
-use FSelectMenu\Translator\ArrayTranslator;
 
 class JsRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,6 +15,13 @@ var vm = require('vm');
 var rendererValue = "%s";
 var rendererChoices = %s;
 var rendererOptions = %s;
+var translator = (function(data) {
+    return {
+        trans: function(key) {
+            return typeof(data[key]) == 'undefined' ? key : data[key];
+        }
+    };
+})(%s);
 var rendererFileContent = fs.readFileSync("%s", 'utf8');
 
 var sandbox = {
@@ -26,6 +32,7 @@ var sandbox = {
     rendererValue: rendererValue,
     rendererChoices: rendererChoices,
     rendererOptions: rendererOptions,
+    translator: translator
 };
 
 // window
@@ -40,6 +47,8 @@ vm.runInContext('define = function(func) { renderer = func(); };', context, 'req
 // load renderer code
 vm.runInContext(rendererFileContent, context, 'renderer.js');
 
+vm.runInContext('renderer.translator = translator', context, 'translator.js');
+
 //run renderer.render()
 vm.runInContext('console.log(renderer.render(rendererValue, rendererChoices, rendererOptions));', context, 'test.js');
 EOF;
@@ -47,7 +56,7 @@ EOF;
     /** 
      * @dataProvider provideRenderTestData 
      */
-    public function testRender($value, $choices, $options, $expect)
+    public function testRender($value, $choices, $options, $expect, $translations)
     {
         if (empty($_SERVER['__TESTENV_NODE_JS_BIN'])) {
             $this->markTestSkipped('The test required node js bin to be configured in phpunit.xml');
@@ -58,6 +67,7 @@ EOF;
             $value,
             json_encode($choices),
             json_encode($options),
+            json_encode($translations),
             realpath(__DIR__ . '/../../../lib/FSelectMenu/Bundle/Resources/public/js/modules/renderer.js')
         ));
         
@@ -88,9 +98,7 @@ EOF;
         $data = array_values(Yaml::parse(__DIR__ . '/render-test-data.yaml'));
         foreach ($data as &$case) {
             $case['output'] = trim($case['output']);
-            if ($case['translator']) {
-                $case['translator'] = new ArrayTranslator($case['translator']);
-            }
+            $case['translator'] = $case['translator'] ?: array();
         }
 
         return $data;
