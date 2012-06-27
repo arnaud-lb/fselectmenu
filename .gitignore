@@ -1,2 +1,3 @@
 test/autoload.php
+phpunit.xml
 vendor

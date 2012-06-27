@@ -22,4 +22,8 @@
       <directory suffix=".php">./lib/</directory>
     </whitelist>
   </filter>
+    
+  <php>
+      <server name="__TESTENV_NODE_JS_BIN" value="" />
+  </php>
 </phpunit>
