@@ -89,6 +89,16 @@ Example:
 {{ fselectmenu('x', {'x': 'Foo', 'y': 'Bar'}, {'nativeAttrs':{'name': 'foo'}}) }}
 ```
 
+### Javascript
+
+Menus can also be rendered in Javascript (e.g. on the client side or in nodejs) with the `renderer` module:
+
+``` javascript
+require(['fselectmenu/renderer'], function(renderer) {
+    var html = renderer.render(value, choices, options);
+});
+```
+
 ### Symfony2
 
 #### Add the FSelectMenu namespace to your autoloader
