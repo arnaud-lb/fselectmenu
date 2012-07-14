@@ -143,7 +143,10 @@ public function registerBundles()
         {% if multiple %}
             {{ parent() }}
         {% else %}
-            {{ block('fselectmenu_choice_widget') }}
+            {# Symfony >= 2.1 #}
+            {{ block('fselectmenu_choice_widget_2_1') }}
+            {# Symfony 2.0 #}
+            {# {{ block('fselectmenu_choice_widget') }} #}
         {% endif %}
     {% endif %}
 {% endspaceless %}

@@ -20,16 +20,29 @@ class Extension extends \Twig_Extension
     public function getFunctions() {
         return array(
             'fselectmenu' => new \Twig_Function_Method($this, 'fselectmenuFunction', array('needs_environment' => true)),
+            'fselectmenu2' => new \Twig_Function_Method($this, 'fselectmenu2Function', array('needs_environment' => true)),
         );
     }
 
-    public function fselectmenuFunction($env, $value, array $choices, array $options)
+    protected function getRenderer(\Twig_Environment $env)
     {
         if (null === $renderer = $this->renderer) {
             $renderer = $this->renderer = new Renderer($env->getCharset(), $this->translator);
         }
 
+        return $renderer;
+    }
+
+    public function fselectmenuFunction($env, $value, array $choices, array $options)
+    {
+        $renderer = $this->getRenderer($env);
         return new \Twig_Markup($renderer->render($value, $choices, $options), $env->getCharset());
+    }
+
+    public function fselectmenu2Function($env, $value, array $choices, array $options)
+    {
+        $renderer = $this->getRenderer($env);
+        return new \Twig_Markup($renderer->render2($value, $choices, $options), $env->getCharset());
     }
 
     public function getName()

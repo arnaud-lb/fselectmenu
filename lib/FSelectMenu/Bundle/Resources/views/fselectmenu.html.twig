@@ -1,6 +1,7 @@
 
 {% use "form_div_layout.html.twig" with choice_widget as orig_choice_widget %}
 
+{# Symfony 2.0 #}
 {% block fselectmenu_choice_widget %}
 {% spaceless %}
 
@@ -21,4 +22,26 @@
     }) }}
 {% endspaceless %}
 {% endblock fselectmenu_choice_widget %}
+
+{# Symfony 2.1 #}
+{% block fselectmenu_choice_widget_2_1 %}
+{% spaceless %}
+
+    {{ fselectmenu2(form.getVar('value'), fselectmenu_convert_choice_views(choices), {
+        'attrs': attr|merge({
+            'id': id~'_html'
+        }),
+        'nativeAttrs': attr|merge({
+            'id': id,
+            'name': full_name
+        }),
+        'optionWrapperAttrs': {
+            'id': id~'_options',
+        },
+        'emptyLabel': empty_value,
+        'separator': separator,
+        'preferredChoices': fselectmenu_convert_choice_views(preferred_choices)
+    }) }}
+{% endspaceless %}
+{% endblock fselectmenu_choice_widget_2_1 %}
 

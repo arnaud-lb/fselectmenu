@@ -1,7 +1,7 @@
 
 services:
     twig.extension.fselectmenu:
-        class:      FSelectMenu\Twig\Extension
+        class:      FSelectMenu\Bundle\Twig\Extension
         arguments:  [@translator]
         tags:
             - { name: twig.extension }
