@@ -26,7 +26,23 @@ class Renderer
         $this->translator = $translator;
     }
 
-    public function render($value, array $choices, array $options = array())
+    /**
+     * Renders a select menu
+     *
+     * $choices is an array of select menu items. Each item is an array with
+     * the following elements:
+     *
+     *  - label:    label
+     *  - value:    value
+     *  - attrs:    optional list of html attributes
+     *  - choices:  nested array of select menu items. If present, this item
+     *              is treated as an option group.
+     *
+     * @param string $value     The selected value
+     * @param array  $choices   Choices
+     * @param array  $options   Options
+     */
+    public function render2($value, array $choices, array $options = array())
     {
         $value = (string) $value;
 
@@ -42,8 +58,6 @@ class Renderer
             'nativeAttrs' => array(
                 'class' => '',
             ),
-            // individual options attribs
-            'optionAttrs' => array(),
             // options wrapper element attributes
             'optionWrapperAttrs' => array(
                 'class' => '',
@@ -52,7 +66,6 @@ class Renderer
             'rawLabels' => false,
             // always display this label
             'fixedLabel' => null,
-            'disabledValues' => array(),
             'emptyLabel' => null,
             'preferredChoices' => array(),
             'separator' => '-------------------',
@@ -71,9 +84,8 @@ class Renderer
                 .= " fselectmenu-options-wrapper fselectmenu-events"
                 . ' ' . $this->valueClass($value);
 
-        if (count($options['disabledValues']) > 0) {
-            $options['disabledValues'] = array_combine($options['disabledValues'], $options['disabledValues']);
-        }
+        $choices = $this->fixupChoiceList($choices);
+        $options['preferredChoices'] = $this->fixupChoiceList($options['preferredChoices']);
 
         // build the fselectmenu element
 
@@ -93,8 +105,7 @@ class Renderer
                 , $options['emptyLabel'], $options['preferredChoices']
                 , $choices
                 , $options['separator']
-                , $value
-                , $options['disabledValues']);
+                , $value);
 
         if (null !== $options['fixedLabel']) {
             $label = $options['fixedLabel'];
@@ -124,54 +135,101 @@ class Renderer
         $html[] = '><span class="fselectmenu-options">';
 
         if (null !== $options['emptyLabel']) {
-            $html[] = $this->buildChoices(array('' => $options['emptyLabel'])
+
+            $list = array(
+                array(
+                    'value' => '',
+                    'label' => $options['emptyLabel'],
+                ),
+            );
+            $list = $this->fixupChoiceList($list);
+
+            $html[] = $this->buildChoices($list
                 , $value
-                , $options['rawLabels'], $options['optionAttrs']
-                , $options['disabledValues']);
+                , $options['rawLabels']);
         }
 
         if (count($options['preferredChoices']) > 0) {
             $html[] = $this->buildChoices($options['preferredChoices'], $value
-                    , $options['rawLabels'], $options['optionAttrs']
-                    , $options['disabledValues']);
+                    , $options['rawLabels']);
             if (null !== $options['separator']) {
                 $html[] = '<span class="fselectmenu-option fselectmenu-disabled fselectmenu-separator">' . ($options['rawLabels'] ? $options['separator'] : $this->escape($options['separator'])) . '</span>';
             }
         }
 
         $html[] = $this->buildChoices($choices, $value
-                , $options['rawLabels'], $options['optionAttrs']
-                , $options['disabledValues']);
+                , $options['rawLabels']);
 
         $html[] = '</span></span></span>';
 
         return \implode('', $html);
     }
 
-    private function buildChoices(array $choices, $value, $rawLabels, array $optionAttrs, array $disabledValues)
+    /**
+     * Renders a select menu (compatibility wrapper; deprecated)
+     *
+     * $choices is an associated array in which keys are selectmenu items
+     * values, and values are items labels.
+     *
+     * @deprecated
+     * @param string $value     The selected value
+     * @param array  $choices   Choices
+     * @param array  $options   Options
+     */
+    public function render($value, array $choices, array $options = array())
+    {
+        $value = (string) $value;
+
+        $options = \array_replace_recursive(array(
+            // individual options attribs
+            'optionAttrs' => array(),
+            'disabledValues' => array(),
+            'preferredChoices' => array(),
+        ), $options);
+
+
+        $choices = $this->makeChoiceList(
+            $choices
+            , $options['optionAttrs']
+            , $options['disabledValues']
+        );
+
+        $options['preferredChoices'] = $this->makeChoiceList(
+            $options['preferredChoices']
+            , $options['optionAttrs']
+            , $options['disabledValues']
+        );
+
+        unset($options['optionAttrs']);
+        unset($options['disabledValues']);
+
+        return $this->render2($value, $choices, $options);
+    }
+
+    private function buildChoices(array $choices, $value, $rawLabels)
     {
         $html = array();
 
-        foreach ($choices as $choiceValue => $choiceLabel) {
+        foreach ($choices as $choice) {
 
-            if (\is_array($choiceLabel)) {
+            if (isset($choice['choices'])) {
                 $html[] = '<span class="fselectmenu-optgroup">';
                 $html[] = '<span class="fselectmenu-optgroup-title">';
-                $html[] = $this->escape($this->translator->trans($choiceValue));
+                $html[] = $this->escape($this->translator->trans($choice['label']));
                 $html[] = '</span>';
-                $html[] = $this->buildChoices($choiceLabel, $value, $rawLabels, $optionAttrs, $disabledValues);
+                $html[] = $this->buildChoices($choice['choices'], $value, $rawLabels);
                 $html[] = '</span>';
                 continue;
             }
 
+            $choiceLabel = $choice['label'];
             $choiceLabel = $this->translator->trans($choiceLabel);
 
-            if (isset($optionAttrs[$choiceValue])) {
-                $attrs = $optionAttrs[$choiceValue];
-            } else {
-                $attrs = array();
-            }
+            $choiceValue = $choice['value'];
 
+            $disabled = $choice['disabled'];
+
+            $attrs = $choice['attrs'];
             $attrs += array(
                 'data-value' => $choiceValue,
                 'data-label' => $rawLabels
@@ -179,7 +237,7 @@ class Renderer
                     : $this->escape($choiceLabel),
                 'class' => "fselectmenu-option"
                     . ($value === (string) $choiceValue ? " fselectmenu-selected" : '')
-                    . (isset($disabledValues[$choiceValue]) ? " fselectmenu-disabled" : '')
+                    . ($disabled ? " fselectmenu-disabled" : '')
                     .' '.$this->valueClass($choiceValue),
             );
 
@@ -215,9 +273,11 @@ class Renderer
 
     private function getSelectedLabelFromChoices($choices, $value, $selectedLabel = null, &$found = false)
     {
-        foreach ($choices as $choiceValue => $choiceLabel) {
-            if (\is_array($choiceLabel)) {
-                foreach ($choiceLabel as $cValue => $cLabel) {
+        foreach ($choices as $choice) {
+            if (isset($choice['choices'])) {
+                foreach ($choice['choices'] as $cChoice) {
+                    $cLabel = $cChoice['label'];
+                    $cValue = $cChoice['value'];
                     if (null === $selectedLabel) {
                         $selectedLabel = $cLabel;
                     }
@@ -228,6 +288,10 @@ class Renderer
                     }
                 }
             } else {
+
+                $choiceValue = $choice['value'];
+                $choiceLabel = $choice['label'];
+
                 if (null === $selectedLabel) {
                     $selectedLabel = $choiceLabel;
                 }
@@ -242,7 +306,7 @@ class Renderer
         return $selectedLabel;
     }
 
-    private function buildNativeElement(array $attrs, $emptyLabel, array $preferredChoices, array $choices, $separator, $value, array $disabledValues)
+    private function buildNativeElement(array $attrs, $emptyLabel, array $preferredChoices, array $choices, $separator, $value)
     {
         $html = array();
 
@@ -254,40 +318,52 @@ class Renderer
         $html[] = '>';
 
         if (null !== $emptyLabel) {
-            $html[] = $this->buildNativeChoices(array('' => $emptyLabel), $value, $disabledValues);
+
+            $list = array(
+                array(
+                    'value' => '',
+                    'label' => $emptyLabel,
+                ),
+            );
+            $list = $this->fixupChoiceList($list);
+
+            $html[] = $this->buildNativeChoices($list, $value);
         }
 
         if (count($preferredChoices) > 0) {
-            $html[] = $this->buildNativeChoices($preferredChoices, $value, $disabledValues);
+            $html[] = $this->buildNativeChoices($preferredChoices, $value);
             if (null !== $separator) {
                 $html[] = '<option value="" disabled="disabled">' . $this->escape($separator) . '</option>';
             }
         }
 
-        $html[] = $this->buildNativeChoices($choices, $value, $disabledValues);
+        $html[] = $this->buildNativeChoices($choices, $value);
         $html[] = '</select>';
 
         return \implode('', $html);
     }
 
-    private function buildNativeChoices(array $choices, $value, array $disabledValues)
+    private function buildNativeChoices(array $choices, $value)
     {
         $html = array();
 
-        foreach($choices as $optValue => $optLabel) {
+        foreach($choices as $choice) {
 
-            if (\is_array($optLabel)) {
-                $title = $this->translator->trans($optValue);
+            if (isset($choice['choices'])) {
+                $title = $this->translator->trans($choice['label']);
                 $html[] = '<optgroup title="'.$this->escape($title).'">';
-                $html[] = $this->buildNativeChoices($optLabel, $value, $disabledValues);
+                $html[] = $this->buildNativeChoices($choice['choices'], $value);
                 $html[] = '</optgroup>';
                 continue;
             }
 
+            $optLabel = $choice['label'];
+            $optValue = $choice['value'];
+
             $label = $this->translator->trans($optLabel);
 
             $selected = $value === (string) $optValue;
-            $disabled = isset($disabledValues[$optValue]);
+            $disabled = $choice['disabled'];
 
             $html[] .= '<option'
                     .($selected ? ' selected="selected"' : '')
@@ -309,5 +385,66 @@ class Renderer
     private function escape($str)
     {
         return \htmlspecialchars($str, \ENT_QUOTES, $this->charset);
+    }
+
+    /**
+     * Converts an array of choices
+     *
+     * Converts from the format expected by render() to the format expected
+     * by render2()
+     */
+    private function makeChoiceList(array $choices, array $optionAttrs, array $disabledValues)
+    {
+        $list = array();
+        $disabledValues = array_combine($disabledValues, $disabledValues);
+
+        foreach ($choices as $value => $label) {
+            if (is_array($label)) {
+                $list[] = array(
+                    'choices' => $this->makeChoiceList($label, $optionAttrs, $disabledValues),
+                    'label' => $value,
+                );
+            } else {
+                $item = array(
+                    'value' => $value,
+                    'label' => $label,
+                );
+                if (isset($optionAttrs[$value])) {
+                    $item['attrs'] = $optionAttrs[$value];
+                }
+                if (isset($disabledValues[$value])) {
+                    $item['disabled'] = $disabledValues[$value];
+                }
+                $list[] = $item;
+            }
+        }
+
+        return $list;
+    }
+
+    private function fixupChoiceList(array $origList)
+    {
+        $list = array();
+
+        $defaults = array(
+            'choices' => null,
+            'label' => null,
+            'value' => null,
+            'attrs' => array(),
+            'disabled' => false,
+        );
+
+        foreach ($origList as $item) {
+
+            $item = $item + $defaults;
+
+            if (is_array($item['choices'])) {
+                $item['choices'] = $this->fixupChoiceList($item['choices']);
+            }
+
+            $list[] = $item;
+        }
+
+        return $list;
     }
 }

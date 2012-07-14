@@ -88,15 +88,15 @@ EOF;
         );
 
         $result = str_replace('><', ">\n<", $proc->getOutput());
-        
+
         $encoding = '<?xml version="1.0" encoding="utf-8"?>';
         $this->assertXmlStringEqualsXmlString($encoding.$expect, $encoding.$result);
     }
 
     public function provideRenderTestData()
     {
-        $data = array_values(Yaml::parse(__DIR__ . '/render-test-data.yaml'));
-        foreach ($data as &$case) {
+        $data = Yaml::parse(__DIR__ . '/render-test-data.yaml');
+        foreach ($data as $name => &$case) {
             $case['output'] = trim($case['output']);
             $case['translator'] = $case['translator'] ?: array();
         }
