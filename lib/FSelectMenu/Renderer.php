@@ -396,7 +396,9 @@ class Renderer
     private function makeChoiceList(array $choices, array $optionAttrs, array $disabledValues)
     {
         $list = array();
-        $disabledValues = array_combine($disabledValues, $disabledValues);
+        if (0 < count($disabledValues)) {
+            $disabledValues = array_combine($disabledValues, $disabledValues);
+        }
 
         foreach ($choices as $value => $label) {
             if (is_array($label)) {
