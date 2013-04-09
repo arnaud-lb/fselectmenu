@@ -27,7 +27,7 @@
 {% block fselectmenu_choice_widget_2_1 %}
 {% spaceless %}
 
-    {{ fselectmenu2(form.getVar('value'), fselectmenu_convert_choice_views(choices), {
+    {{ fselectmenu2(form.get('value'), fselectmenu_convert_choice_views(choices), {
         'attrs': attr|merge({
             'id': id~'_html'
         }),
