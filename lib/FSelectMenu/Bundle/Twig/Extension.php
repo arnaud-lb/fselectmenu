@@ -19,8 +19,8 @@ class Extension extends BaseExtension
 
         foreach ($choiceViews as $choiceView) {
             $choices[] = array(
-                'value' => $choiceView->getValue(),
-                'label' => $choiceView->getLabel(),
+                'value' => $choiceView->value,
+                'label' => $choiceView->label,
             );
         }
 
